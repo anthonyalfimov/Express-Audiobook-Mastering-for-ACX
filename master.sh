@@ -34,6 +34,18 @@ function updateOutputName {
     echo "$name"
 }
 
+### Set global project parameters
+## Compression Paremeters
+fx_comp_thres="-14.0"
+fx_comp_knee="2.0"
+
+## File padding
+# ACX: Each file must have no more than 5 seconds of room tone at its beginning and end.
+# Other services: 0.5 - 1 second of room tone at the beginning, 1 - 5 seconds of room tone at the end.
+fx_fade_length="0.1"
+fx_pad_in="0.75"
+fx_pad_out="2.5"
+
 for project_path in ./input/*
 do
     # Proceed only with subdirectories of `./input/`
@@ -55,32 +67,13 @@ do
     echo "Project: $project_name" > "$log_path"
     echo "" >> "$log_path"
 
+    # Report to consolse
     echo "Project $project_name"
-
-    ### Set global project parameters
-    ## Compression Paremeters
-    fx_comp_thres="-14.0"
-    fx_comp_knee="2.0"
-
-    ## File padding
-    # ACX: Each file must have no more than 5 seconds of room tone at its beginning and end.
-    # Other services: 0.5 - 1 second of room tone at the beginning, 1 - 5 seconds of room tone at the end.
-    fx_fade_length=0.1
-    fx_pad_in=0.75
-    fx_pad_out=2.5
-
-    # Log Spacing parameters
-    echo "### Spacing" >> "$log_path"
-    printf "Beginning pad:      %.2f s\n" "$fx_pad_in" >> "$log_path"
-    printf "Ending pad:         %.2f s\n" "$fx_pad_out" >> "$log_path"
-    echo "" >> "$log_path"
+    echo "Processing project files..."
+    echo ""
 
     # Add Log header for RMS and Peak readings per file
     echo "### RMS and Peak levels" >> "$log_path"
-
-    # Report to consolse
-    echo "Processing project files..."
-    echo ""
 
     ### Process project files
     for input_file in "$project_path"/*.wav "$project_path"/**/*.wav
